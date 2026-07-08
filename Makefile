@@ -8,7 +8,7 @@ ifdef EMBEDDED
 	CFLAGS += -DEMBEDDED
 endif
 
-PREFIX?=/usr/local
+PREFIX?=/usr
 EXECUTABLE = shorkmines
 LIBMINESWEEPER = libminesweeper/libminesweeper.a
 SOURCES = $(wildcard *.c)
