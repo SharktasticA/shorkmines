@@ -69,15 +69,15 @@ void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, W
 	int index = tile_index_for_tile(game, tile);
 	bool is_cursor = tile == game->selected_tile;
 	if (index == TILE_INDEX_MINE)
-		wattron(window, COLOR_PAIR(COLOR_PAIR_MINE));
+		wattron(window, COLOR_PAIR(COLOR_PAIR_MINE) | A_BOLD);
 	else if (is_cursor)
-		wattron(window, COLOR_PAIR(COLOR_PAIR_CURSOR));
+		wattron(window, COLOR_PAIR(COLOR_PAIR_CURSOR) | A_BOLD);
 	else if (index == TILE_INDEX_FLAG)
-		wattron(window, COLOR_PAIR(COLOR_PAIR_FLAG));
+		wattron(window, COLOR_PAIR(COLOR_PAIR_FLAG) | A_BOLD);
 	else if (index >= 1 && index <= 8)
-		wattron(window, COLOR_PAIR(COLOR_PAIR_1 + (index - 1)));
+		wattron(window, COLOR_PAIR(COLOR_PAIR_1 + (index - 1)) | A_BOLD);
 	else
-		wattron(window, COLOR_PAIR(COLOR_PAIR_DEFAULT));
+		wattron(window, COLOR_PAIR(COLOR_PAIR_DEFAULT) | A_BOLD);
 
 	// Add 1 to the position in both axes so we stay within the
 	// window border.
