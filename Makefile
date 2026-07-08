@@ -14,15 +14,12 @@ $(EXECUTABLE): $(LIBMINESWEEPER) $(OBJECTS)
 $(LIBMINESWEEPER):
 	$(MAKE) -C libminesweeper
 
-.PHONY: clean install uninstall ascii-only
-
-ascii-only: CPPFLAGS+=-DASCII_ONLY
-ascii-only: $(EXECUTABLE)
+.PHONY: clean install uninstall
 
 clean:
-	rm -f $(EXECUTABLE)
-	rm $(OBJECTS)
-	$(MAKE) -C libminesweeper clean
+	rm -f $(EXECUTABLE) || true
+	rm $(OBJECTS) || true
+	$(MAKE) -C libminesweeper clean || true
 
 install: $(EXECUTABLE)
 	install -d $(DESTDIR)$(PREFIX)/bin/

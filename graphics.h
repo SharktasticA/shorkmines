@@ -17,24 +17,16 @@ enum {
 	COLOR_PAIR_5,
 	COLOR_PAIR_6,
 	COLOR_PAIR_7,
-	COLOR_PAIR_8,
-	COLOR_PAIR_ADVENTURE_EXIT,
-	COLOR_PAIR_ADVENTURE_PLAYER
+	COLOR_PAIR_8
 };
 
-#ifdef ASCII_ONLY
-#define TILE_MAP {" ", "1", "2", "3", "4", "5", "6", "7", "8", "#", "*", "F", "@", ">"}
-#else
-#define TILE_MAP {" ", "1", "2", "3", "4", "5", "6", "7", "8", "■", "¤", "Þ", "@", ">"}
-#endif
+#define TILE_MAP {" ", "1", "2", "3", "4", "5", "6", "7", "8", "#", "*", "F"}
 
 enum TILE_INDEX {
     TILE_INDEX_EMPTY = 0,
 	TILE_INDEX_UNOPENED = 9,
 	TILE_INDEX_MINE,
 	TILE_INDEX_FLAG,
-	TILE_INDEX_ADVENTURE_PLAYER,
-	TILE_INDEX_ADVENTURE_EXIT,
 };
 
 void init_colors();
