@@ -1,7 +1,8 @@
+SYSROOT ?=
 CFLAGS = -std=c99 -Wall
-LDLIBS = -lncurses -lminesweeper
-LDFLAGS = -Llibminesweeper
-CPPFLAGS = -Ilibminesweeper/include
+LDLIBS = -lncursesw -lminesweeper
+LDFLAGS = -Llibminesweeper -L$(SYSROOT)/lib
+CPPFLAGS = -Ilibminesweeper/include -I$(SYSROOT)/include
 
 PREFIX?=/usr/local
 EXECUTABLE = shorkmines
@@ -12,7 +13,7 @@ OBJECTS = $(SOURCES:.c=.o)
 $(EXECUTABLE): $(LIBMINESWEEPER) $(OBJECTS)
 
 $(LIBMINESWEEPER):
-	$(MAKE) -C libminesweeper
+	$(MAKE) -C libminesweeper SYSROOT=$(SYSROOT)
 
 .PHONY: clean install uninstall
 
