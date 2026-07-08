@@ -12,7 +12,7 @@ An ncurses-based minesweeper game. It is a fork of Joel Ekström's [terminal-min
 
 _This assumes you already have the prerequisites for compilation installed._
 
- curl -fsSL https://raw.githubusercontent.com/SharktasticA/shorkmines/refs/heads/main/install.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/SharktasticA/shorkmines/refs/heads/master/install.sh | bash
 
 
 
