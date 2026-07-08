@@ -128,21 +128,25 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 		switch(ch) {	
 		case KEY_LEFT:
 		case 'h':
+		case 'a':
 			tm_move_cursor(game, LEFT, options);
 			break;
 
 		case KEY_RIGHT:
 		case 'l':
+		case 'd':
 			tm_move_cursor(game, RIGHT, options);
 			break;
 
 		case KEY_UP:
 		case 'k':
+		case 'w':
 			tm_move_cursor(game, UP, options);
 			break;
 
 		case KEY_DOWN:
 		case 'j':
+		case 's':
 			tm_move_cursor(game, DOWN, options);
 			break;
 
@@ -156,6 +160,8 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 			update_status_window(status_win, game);
 			break;
 		case ',':
+		case '\n':
+		case '\r':
 			minesweeper_open_tile(game, game->selected_tile);
 			update_status_window(status_win, game);
 			break;

@@ -8,6 +8,12 @@
 #include <unistd.h>
 #include "options.h"
 
+
+
+static const char *VERSION = "1.3-wip";
+
+
+
 void show_help();
 void print_version();
 
@@ -98,5 +104,5 @@ void show_help()
 
 void print_version()
 {
-	puts("1.2.0");
+	printf("SHORKMINES %s\n", VERSION);
 }

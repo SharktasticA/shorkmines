@@ -1,14 +1,10 @@
-# terminal-mines
-An [ncurses](https://en.wikipedia.org/wiki/Ncurses)-based minesweeper game. This was made because I wanted a minesweeper game that was efficient to play without mouse. It's also a reference frontend for [libminesweeper](https://github.com/accatyyc/libminesweeper/).
+# SHORKMINES
+
+An ncurses-based minesweeper game. It is a fork of Joel Ekström's [terminal-mines](https://github.com/joelekstrom/terminal-mines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
 
 <img src="screenshots/terminal-mines.png" alt="Game screenshot" height="260" width="350"> 
 
 ## Installation
-
-### OSX Homebrew
-```
-brew install joelekstrom/repo/terminal-mines
-```
 
 ### Other OS's/manual compilation
 After cloning the project, `cd` to the folder and run:
@@ -38,9 +34,9 @@ terminal-mines -w 20 -h 20 -m 0.5
 ```
 
 ## Controls
-- Movement: `hjkl` or arrow keys
+- Movement: `hjkl`, `wasd` or arrow keys
 - Place flag: `f` or `g`
-- Open tile: `,`
+- Open tile: `,` or Enter
 - Place flag on unopened tile & open adjacent tiles of opened tile: ` `
 
 The controls were inspired by nethack/vim.
