@@ -44,7 +44,7 @@ void render_bar(WINDOW *window, const char *text)
 	wbkgd(window, COLOR_PAIR(COLOR_PAIR_BAR) | ' ');
 	werase(window);
 	wattron(window, COLOR_PAIR(COLOR_PAIR_BAR) | A_BOLD);
-	mvwprintw(window, 0, 1, "%s", text);
+	mvwprintw(window, 0, 0, "%s", text);
 	wattroff(window, COLOR_PAIR(COLOR_PAIR_BAR) | A_BOLD);
 	wrefresh(window);
 }
