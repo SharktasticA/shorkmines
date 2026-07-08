@@ -1,8 +1,10 @@
 # SHORKMINES
 
-An ncurses-based minesweeper game. It is a fork of Joel Ekström's [terminal-mines](https://github.com/joelekstrom/terminal-mines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
+An ncurses-based minesweeper game. It is a fork of Joel Ekström's [shorkmines](https://github.com/joelekstrom/shorkmines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
 
-<img src="screenshots/terminal-mines.png" alt="Game screenshot" height="260" width="350"> 
+<img src="screenshots/shorkmines.png" alt="Game screenshot" height="260" width="350"> 
+
+
 
 ## Installation
 
@@ -16,8 +18,11 @@ make install
 
 Terminal Mines is now installed on your system.
 
+
+
 ## Starting the game
-Run the game by typing `terminal-mines`. Run `terminal-mines --help` or `man terminal-mines`
+
+Run the game by typing `shorkmines`. Run `shorkmines --help` or `man shorkmines`
 to view additional info.
 
 To select size/difficulty, play with the following options:
@@ -30,10 +35,13 @@ All the arguments can be written shorthand with the first letter in the name.
 
 Example:
 ```
-terminal-mines -w 20 -h 20 -m 0.5
+shorkmines -w 20 -h 20 -m 0.5
 ```
 
+
+
 ## Controls
+
 - Movement: `hjkl`, `wasd` or arrow keys
 - Place flag: `f` or `g`
 - Open tile: `,` or Enter
@@ -41,19 +49,9 @@ terminal-mines -w 20 -h 20 -m 0.5
 
 The controls were inspired by nethack/vim.
 
-## Adventure Mode
 
-Adventure Mode is a new mode added in version 1.1.0. To start a game in adventure mode,
-use the `--adventure-mode` or `-a` option. When playing in adventure mode, you control
-the player character, `@`, and you must reach the exit tile, `>`.
-
-Every tile you cross will be opened, and you can not place any flags. The standard
-difficulty options work in adventure mode as well.
-
-## Using plain ASCII
-If you prefer the old graphics, compile with `make ascii-only`
-before running `make install`.
 
 ## Uninstall
+
 To completely remove terminal mines (if you compiled it yourself), run `make uninstall` in
 the source folder.

@@ -40,27 +40,24 @@ struct tm_options parse_options(int argc, char **argv)
 			case 'w':
 			{
 				uintmax_t value = strtoumax(optarg, NULL, 10);
-				if (value != UINTMAX_MAX) {
+				if (value != UINTMAX_MAX)
 					tm_options.width = (int)value;
-				}
 				break;
 			}
 
 			case 'h':
 			{
 				uintmax_t value = strtoumax(optarg, NULL, 10);
-				if (value != UINTMAX_MAX) {
+				if (value != UINTMAX_MAX)
 					tm_options.height = (int)value;
-				}
 				break;
 			}
 
 			case 'm':
 			{
 				float value = strtof(optarg, NULL);
-				if (value != 0) {
+				if (value != 0)
 					tm_options.mine_density = value;
-				}
 				break;
 			}
 
@@ -85,10 +82,10 @@ void show_help()
 {
 	// If manpage exists locally, prioritize it to allow local builds to show help
 	char *manpage_path = NULL;
-	if (access("man/terminal-mines.1", F_OK | R_OK) != -1 )
-		manpage_path = "man/terminal-mines.1";
+	if (access("man/shorkmines.1", F_OK | R_OK) != -1 )
+		manpage_path = "man/shorkmines.1";
 	else
-		manpage_path = "terminal-mines";
+		manpage_path = "shorkmines";
 
 	pid_t pid = fork();
 	if (pid == 0) /* Child process */

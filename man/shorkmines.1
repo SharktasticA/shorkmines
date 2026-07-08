@@ -1,24 +1,24 @@
-.TH "TERMINAL MINES" 1
+.TH "SHORKMINES" 1
 .SH NAME
-terminal-mines \- A minesweeper game for terminals.
+shorkmines \- A minesweeper game for terminals.
 .SH SYNOPSIS
-.B terminal-mines
+.B shorkmines
 [\fB\-w\fR \fIWIDTH\fR]
 [\fB\-h\fR \fIHEIGHT\fR]
 [\fB\-m\fR \fIDENSITY\fR]
 .SH DESCRIPTION
-.B terminal-mines
+.B shorkmines
 is an implementation of Minesweeper. It is played using the keyboard
 instead of a mouse.
 .SH CONTROLS
 .TP
-.BR h ", " j ", " k ", " l ", " arrows-keys\fR
+.BR hjkl ", " wasd ", " arrows-keys\fR
 Move the cursor around
 .TP
 .BR f ", " g\fR
 Toggle flag at tile under cursor
 .TP
-.BR ,\fR
+.BR , " OR " Enter\fR
 Open tile under cursor
 .SH OPTIONS
 .TP
@@ -33,11 +33,6 @@ A value between 0.0 and 1.0 that determines the difficulty of the game.
 The default value is 0.1, which means that roughly 10% of all tiles will contain
 a mine. Increase the value to increase the difficulty. The game will start to
 become unplayable when around 0.5.
-.TP
-.BR \-a ", " \-\-adventure-mode
-Start a game in adventure mode. In adventure mode, you are supposed to
-escape from a mine field. You control the player character, @. Navigating
-the field, you have to reach the exit, >.
 
 In this mode, you can not place flags, and you can only open tiles that you
 step on. Any tile that you step on will automatically open.
