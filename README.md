@@ -1,8 +1,6 @@
 # SHORKMINES
 
-An ncurses-based minesweeper game. It is a fork of Joel Ekström's [shorkmines](https://github.com/joelekstrom/shorkmines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
-
-<img src="screenshots/shorkmines.png" alt="Game screenshot" height="260" width="350"> 
+An ncurses-based minesweeper game. It is a fork of Joel Ekström's [terminal-mines](https://github.com/joelekstrom/terminal-mines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
 
 
 
