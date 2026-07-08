@@ -4,6 +4,10 @@ LDLIBS = -lncursesw -lminesweeper
 LDFLAGS = -Llibminesweeper -L$(SYSROOT)/lib
 CPPFLAGS = -Ilibminesweeper/include -I$(SYSROOT)/include
 
+ifdef EMBEDDED
+	CFLAGS += -DEMBEDDED
+endif
+
 PREFIX?=/usr/local
 EXECUTABLE = shorkmines
 LIBMINESWEEPER = libminesweeper/libminesweeper.a

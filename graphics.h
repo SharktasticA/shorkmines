@@ -30,6 +30,9 @@ enum TILE_INDEX {
 	TILE_INDEX_FLAG,
 };
 
+#ifdef EMBEDDED
+void draw_box(WINDOW *window);
+#endif
 void init_colors();
 void render_bar(WINDOW *window, const char *text);
 void render_game(struct minesweeper_game *game, WINDOW *window);

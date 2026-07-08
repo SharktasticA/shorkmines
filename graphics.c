@@ -3,6 +3,27 @@
 
 extern struct tm_options global_options;
 
+
+#ifdef EMBEDDED
+
+void draw_box(WINDOW *win)
+{
+	int height, width;
+	getmaxyx(win, height, width);
+
+	mvwhline(win, 0, 1, '-', width - 2);
+	mvwhline(win, height - 1, 1, '-', width - 2);
+	mvwvline(win, 1, 0, '|', height - 2);
+	mvwvline(win, 1, width - 1, '|', height - 2);
+
+	mvwaddch(win, 0, 0, '+');
+	mvwaddch(win, 0, width - 1, '+');
+	mvwaddch(win, height - 1, 0, '+');
+	mvwaddch(win, height - 1, width - 1, '+');
+}
+
+#endif
+
 void init_colors()
 {
 	use_default_colors();
@@ -40,6 +61,9 @@ void render_game(struct minesweeper_game *game, WINDOW *window)
 	}
 }
 
+#ifdef EMBEDDED
+void draw_box(WINDOW *window);
+#endif
 void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window)
 {
 	int index = tile_index_for_tile(game, tile);
@@ -100,8 +124,11 @@ void update_status_window(WINDOW *status_window, struct minesweeper_game *game)
 
 	int flag_text_length = strlen(flag_text);
 
-	wclear(status_window);
+#ifdef EMBEDDED
+	draw_box(status_window);
+#else
 	box(status_window, 0, 0);
+#endif
 	mvwprintw(status_window, 1, 1, "%s", mine_text);
 	mvwprintw(status_window, 1, window_width - (flag_text_length - 1), "%s", flag_text);
 	wrefresh(status_window);

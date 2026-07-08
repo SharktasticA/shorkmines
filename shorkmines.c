@@ -80,7 +80,12 @@ void start_with_game(struct minesweeper_game *game, struct tm_options options)
 	int window_x = screen_width / 2 - window_width / 2;
 	int window_y = (screen_height - (window_height + 3)) / 2;
 	game_win = newwin(window_height, window_width, window_y, window_x);
+
+#ifdef EMBEDDED
+	draw_box(game_win);
+#else
 	box(game_win, 0, 0);
+#endif
 
 	status_win = newwin(3, window_width, window_y + window_height, window_x);
 
@@ -155,6 +160,10 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 				update_status_window(status_win, game);
 				break;
 			case 'q':
+#ifdef EMBEDDED
+				clear();
+				refresh();
+#endif
 				endwin();
 				exit(0);
 				break;
@@ -183,11 +192,19 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 	getmaxyx(stdscr, screen_height, screen_width);
 	int window_width = strlen(end_text) + 2;
 	WINDOW *end_win = newwin(3, window_width, screen_height / 2 - 2, screen_width / 2 - window_width / 2);
+#ifdef EMBEDDED
+	draw_box(end_win);
+#else
 	box(end_win, 0, 0);
+#endif
 	mvwprintw(end_win, 1, 1, end_text);
 	wrefresh(end_win);
 
 	wgetch(window);
+#ifdef EMBEDDED
+	clear();
+	refresh();
+#endif
  	endwin();
 }
 
