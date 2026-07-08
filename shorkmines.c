@@ -115,10 +115,62 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 {
 	// Wait for keygame input
 	keypad(stdscr, TRUE);
-	int ch;
-	while((ch = getch()) != KEY_F(1) && (game->state == MINESWEEPER_PENDING_START || game->state == MINESWEEPER_PLAYING))
+	nodelay(stdscr, FALSE);
+
+	while(1)
 	{
 		struct minesweeper_tile *previous_tile = game->selected_tile;
+		int ch = getch();
+
+		if (ch == 27)
+		{
+			nodelay(stdscr, TRUE);
+			int c1 = getch();
+			int c2 = ERR;
+			if (c1 == '[' || c1 == 'O')
+				c2 = getch();
+			nodelay(stdscr, FALSE);
+
+			if (c1 == '[' || c1 == 'O')
+			{
+				switch (c2)
+				{
+					case 'A':
+						ch = KEY_UP;
+						break;
+					case 'B':
+						ch = KEY_DOWN;
+						break;
+					case 'C':
+						ch = KEY_RIGHT;
+						break;
+					case 'D':
+						ch = KEY_LEFT;
+						break;
+					case 'x':
+						ch = KEY_UP;
+						break;
+					case 'r':
+						ch = KEY_DOWN;
+						break;
+					case 't':
+						ch = KEY_LEFT;
+						break;
+					case 'v':
+						ch = KEY_RIGHT;
+						break;
+					default:
+						ch = 27;
+						break;
+				}
+			}
+		}
+
+		if (ch == KEY_F(1))
+			break;
+		if (!(game->state == MINESWEEPER_PENDING_START || game->state == MINESWEEPER_PLAYING))
+			break;
+
 		switch(ch)
 		{
 			case KEY_LEFT:
