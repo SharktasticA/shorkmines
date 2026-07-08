@@ -27,8 +27,8 @@ struct tm_options parse_options(int argc, char **argv)
 
 	// Default options
 	struct tm_options tm_options = {
-		.width = 20,
-		.height = 10,
+		.width = 16,
+		.height = 16,
 		.mine_density = 0.1
 	};
 

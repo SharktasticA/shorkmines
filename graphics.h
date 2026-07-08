@@ -17,7 +17,8 @@ enum {
 	COLOR_PAIR_5,
 	COLOR_PAIR_6,
 	COLOR_PAIR_7,
-	COLOR_PAIR_8
+	COLOR_PAIR_8,
+	COLOR_PAIR_BAR
 };
 
 #define TILE_MAP {" ", "1", "2", "3", "4", "5", "6", "7", "8", "#", "*", "F"}
@@ -30,8 +31,10 @@ enum TILE_INDEX {
 };
 
 void init_colors();
+void render_bar(WINDOW *window, const char *text);
 void render_game(struct minesweeper_game *game, WINDOW *window);
 void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window);
+int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *tile);
 void update_status_window(WINDOW *status_window, struct minesweeper_game *game);
 
 #endif

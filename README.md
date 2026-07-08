@@ -42,7 +42,7 @@ shorkmines -w 20 -h 20 -m 0.5
 
 - Movement: `hjkl`, `wasd` or arrow keys
 - Place flag: `f` or `g`
-- Open tile: `,` or Enter
+- Open tile: `,` or Space
 - Place flag on unopened tile & open adjacent tiles of opened tile: ` `
 
 The controls were inspired by nethack/vim.

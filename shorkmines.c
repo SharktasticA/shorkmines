@@ -15,6 +15,8 @@ void tile_changed(struct minesweeper_game *game, struct minesweeper_tile *tile, 
 
 WINDOW *game_win;
 WINDOW *status_win;
+WINDOW *header_win;
+WINDOW *footer_win;
 struct tm_options global_options;
 
 void setup_ncurses()
@@ -26,6 +28,7 @@ void setup_ncurses()
 	noecho();
 	init_colors();
 	curs_set(0);
+	refresh();
 }
 
 int main(int argc, char **argv)
@@ -65,6 +68,11 @@ void start_with_game(struct minesweeper_game *game, struct tm_options options)
 	int screen_width, screen_height;
 	getmaxyx(stdscr, screen_height, screen_width);
 
+	// Create a header for displaying program name and game size and a footer
+	// for game controls
+	header_win = newwin(1, screen_width, 0, 0);
+	footer_win = newwin(1, screen_width, screen_height - 1, 0);
+
 	// Create window where we will draw the game. Add 2
 	// tiles padding so we can draw a box around it
 	int window_width = game->width + 2;
@@ -78,9 +86,14 @@ void start_with_game(struct minesweeper_game *game, struct tm_options options)
 
 	minesweeper_set_cursor(game, game->width / 2, game->height / 2);
 
+	// Draw header and footer
+	char title[80];
+	snprintf(title, 80, "SHORKMINES - %dx%d", game->width, game->height);
+	render_bar(header_win, title);
+	render_bar(footer_win, "[hjkl] Move [f] Flag [Space] Open [q] Quit");
+
 	// Draw an initial representation so you see the window when the game starts
 	render_game(game, game_win);
-	refresh();
 	wrefresh(game_win);
 	update_status_window(status_win, game);
 	wrefresh(status_win);
@@ -132,15 +145,18 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 				minesweeper_toggle_flag(game, game->selected_tile);
 				update_status_window(status_win, game);
 				break;
-			case ' ':
+			/*case ' ':
 				minesweeper_space_tile(game, game->selected_tile);
 				update_status_window(status_win, game);
-				break;
+				break;*/
 			case ',':
-			case '\n':
-			case '\r':
+			case ' ':
 				minesweeper_open_tile(game, game->selected_tile);
 				update_status_window(status_win, game);
+				break;
+			case 'q':
+				endwin();
+				exit(0);
 				break;
 		}
 
@@ -159,9 +175,9 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 	// Create a win/lose window, and then exit the game after a key press
 	char *end_text = NULL;
 	if (game->state == MINESWEEPER_GAME_OVER)
-		end_text = "You failed!";
+		end_text = "BOOM";
 	else if (game->state == MINESWEEPER_WIN)
-		end_text = "You win! Niiiice!";
+		end_text = "CONGRATS";
 
 	int screen_width, screen_height;
 	getmaxyx(stdscr, screen_height, screen_width);

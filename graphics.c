@@ -1,6 +1,8 @@
 #include "graphics.h"
 #include <string.h>
 
+extern struct tm_options global_options;
+
 void init_colors()
 {
 	use_default_colors();
@@ -13,44 +15,29 @@ void init_colors()
 	init_pair(COLOR_PAIR_3, COLOR_RED, -1);
 	init_pair(COLOR_PAIR_4, COLOR_YELLOW, -1);
 	// TODO: Set colors for 5,6,7,8
+	init_pair(COLOR_PAIR_BAR, COLOR_WHITE, COLOR_BLUE);
 }
 
-void update_status_window(WINDOW *status_window, struct minesweeper_game *game)
+void render_bar(WINDOW *window, const char *text)
 {
-	int window_width = game->width;
-	
-	char mine_text[128];
-	char flag_text[128];
-	snprintf(mine_text, sizeof(mine_text), "Mines: %d", game->mine_count);
-	snprintf(flag_text, sizeof(flag_text), "Flags: %d", game->flag_count);
-
-	int flag_text_length = strlen(flag_text);
-
-	wclear(status_window);
-	box(status_window, 0, 0);
-	mvwprintw(status_window, 1, 1, "%s", mine_text);
-	mvwprintw(status_window, 1, window_width - (flag_text_length - 1), "%s", flag_text);
-	wrefresh(status_window);
+	wbkgd(window, COLOR_PAIR(COLOR_PAIR_BAR) | ' ');
+	werase(window);
+	wattron(window, COLOR_PAIR(COLOR_PAIR_BAR) | A_BOLD);
+	mvwprintw(window, 0, 1, "%s", text);
+	wattroff(window, COLOR_PAIR(COLOR_PAIR_BAR) | A_BOLD);
+	wrefresh(window);
 }
 
-extern struct tm_options global_options;
-
-int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *tile)
+void render_game(struct minesweeper_game *game, WINDOW *window)
 {
-	// Opened with mine, and game over state where all mines are displayed
-	if ((tile->has_mine && game->state == MINESWEEPER_GAME_OVER) || (tile->has_mine && tile->is_opened))
-		return TILE_INDEX_MINE;
-
-	// On opened tile, we show the adjacent mine count
-	if (tile->is_opened)
-		return tile->adjacent_mine_count;
-
-	// Flags are shown as an 'F'
-	if (tile->has_flag)
-		return TILE_INDEX_FLAG;
-
-	// Unopened tiles
-	return TILE_INDEX_UNOPENED;
+	for (unsigned x = 0; x < game->width; x++) 
+	{
+		for (unsigned y = 0; y < game->height; y++) 
+		{
+			struct minesweeper_tile *tile = minesweeper_get_tile_at(game, x, y);
+			render_tile(game, tile, window);
+		}
+	}
 }
 
 void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window)
@@ -75,14 +62,47 @@ void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, W
 	mvwaddstr(window, y + 1, x + 1, tile_map[index]);
 }
 
-void render_game(struct minesweeper_game *game, WINDOW *window)
+int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *tile)
 {
-	for (unsigned x = 0; x < game->width; x++) 
+	// Opened with mine, and game over state where all mines are displayed
+	if ((tile->has_mine && game->state == MINESWEEPER_GAME_OVER) || (tile->has_mine && tile->is_opened))
+		return TILE_INDEX_MINE;
+
+	// On opened tile, we show the adjacent mine count
+	if (tile->is_opened)
+		return tile->adjacent_mine_count;
+
+	// Flags are shown as an 'F'
+	if (tile->has_flag)
+		return TILE_INDEX_FLAG;
+
+	// Unopened tiles
+	return TILE_INDEX_UNOPENED;
+}
+
+void update_status_window(WINDOW *status_window, struct minesweeper_game *game)
+{
+	int window_width = game->width;
+	
+	char mine_text[128];
+	char flag_text[128];
+
+	if (window_width >= 20)
 	{
-		for (unsigned y = 0; y < game->height; y++) 
-		{
-			struct minesweeper_tile *tile = minesweeper_get_tile_at(game, x, y);
-			render_tile(game, tile, window);
-		}
+		snprintf(mine_text, sizeof(mine_text), "Mines: %d", game->mine_count);
+		snprintf(flag_text, sizeof(flag_text), "Flags: %d", game->flag_count);
 	}
+	else
+	{
+		snprintf(mine_text, sizeof(mine_text), "M: %d", game->mine_count);
+		snprintf(flag_text, sizeof(flag_text), "F: %d", game->flag_count);
+	}
+
+	int flag_text_length = strlen(flag_text);
+
+	wclear(status_window);
+	box(status_window, 0, 0);
+	mvwprintw(status_window, 1, 1, "%s", mine_text);
+	mvwprintw(status_window, 1, window_width - (flag_text_length - 1), "%s", flag_text);
+	wrefresh(status_window);
 }
