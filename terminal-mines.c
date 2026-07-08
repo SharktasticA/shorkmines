@@ -37,8 +37,11 @@ int main(int argc, char **argv)
 	int screen_width, screen_height;
 	getmaxyx(stdscr, screen_height, screen_width);
 
-	int max_width = screen_width - 2; // Remove 2 so we can fit window border
-	int max_height = screen_height - 5; // Window border + status window height
+	// -2 for left and right borders
+	int max_width = screen_width - 2; 
+	// -2 for top and bottom borders, -3 for status window, -2 for extra
+	// padding
+	int max_height = screen_height - 7;
 
 	if (global_options.width > max_width) 
 		global_options.width = max_width;
@@ -67,7 +70,7 @@ void start_with_game(struct minesweeper_game *game, struct tm_options options)
 	int window_width = game->width + 2;
 	int window_height = game->height + 2;
 	int window_x = screen_width / 2 - window_width / 2;
-	int window_y = screen_height / 2 - window_height / 2;
+	int window_y = (screen_height - (window_height + 3)) / 2;
 	game_win = newwin(window_height, window_width, window_y, window_x);
 	box(game_win, 0, 0);
 
