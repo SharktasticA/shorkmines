@@ -18,7 +18,9 @@ enum {
 	COLOR_PAIR_6,
 	COLOR_PAIR_7,
 	COLOR_PAIR_8,
-	COLOR_PAIR_BAR
+	COLOR_PAIR_BAR,
+	COLOR_PAIR_WIN,
+	COLOR_PAIR_LOSE
 };
 
 #define TILE_MAP {" ", "1", "2", "3", "4", "5", "6", "7", "8", "#", "*", "F"}

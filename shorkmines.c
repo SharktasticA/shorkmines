@@ -233,24 +233,44 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 	render_game(game, window);
 	wrefresh(window);
 
-	// Create a win/lose window, and then exit the game after a key press
-	char *end_text = NULL;
-	if (game->state == MINESWEEPER_GAME_OVER)
-		end_text = "BOOM";
-	else if (game->state == MINESWEEPER_WIN)
-		end_text = "CONGRATS";
 
-	int screen_width, screen_height;
-	getmaxyx(stdscr, screen_height, screen_width);
-	int window_width = strlen(end_text) + 2;
-	WINDOW *end_win = newwin(3, window_width, screen_height / 2 - 2, screen_width / 2 - window_width / 2);
+
+	// Update the status window to display a win/lose message, and then exit
+	// the game after a key press
+	char *end_text = NULL;
+	int end_color = COLOR_PAIR_DEFAULT;
+	if (game->state == MINESWEEPER_GAME_OVER)
+	{
+		end_text = ":-(";
+		end_color = COLOR_PAIR_LOSE;
+	}
+	else if (game->state == MINESWEEPER_WIN)
+	{
+		end_text = "B-)";
+		end_color = COLOR_PAIR_WIN;
+	}
+
+	wclear(status_win);
 #ifdef EMBEDDED
-	draw_box(end_win);
+	draw_box(status_win);
 #else
-	box(end_win, 0, 0);
+	box(status_win, 0, 0);
 #endif
-	mvwprintw(end_win, 1, 1, end_text);
-	wrefresh(end_win);
+
+	int win_width, win_height;
+	getmaxyx(status_win, win_height, win_width);
+	wattron(status_win, COLOR_PAIR(end_color));
+	mvwhline(status_win, 1, 1, ' ', win_width - 2);
+	wattroff(status_win, COLOR_PAIR(end_color));
+
+	int text_x = (win_width - (int)strlen(end_text)) / 2;
+	if (text_x < 1)
+		text_x = 1;
+
+	wattron(status_win, COLOR_PAIR(end_color) | A_BOLD);
+	mvwprintw(status_win, 1, text_x, "%s", end_text);
+	wattroff(status_win, COLOR_PAIR(end_color) | A_BOLD);
+	wrefresh(status_win);
 
 	wgetch(window);
 #ifdef EMBEDDED

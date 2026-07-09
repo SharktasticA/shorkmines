@@ -37,6 +37,8 @@ void init_colors()
 	init_pair(COLOR_PAIR_4, COLOR_YELLOW, -1);
 	// TODO: Set colors for 5,6,7,8
 	init_pair(COLOR_PAIR_BAR, COLOR_WHITE, COLOR_BLUE);
+	init_pair(COLOR_PAIR_WIN, COLOR_WHITE, COLOR_GREEN);
+	init_pair(COLOR_PAIR_LOSE, COLOR_WHITE, COLOR_RED);
 }
 
 void render_bar(WINDOW *window, const char *text)

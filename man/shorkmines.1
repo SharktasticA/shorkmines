@@ -1,44 +1,34 @@
 .TH "SHORKMINES" 1
 .SH NAME
-shorkmines \- A minesweeper game for terminals.
+shorkmines \- An ncurses-based minesweeper game played using a keyboard instead of a mouse.
 .SH SYNOPSIS
 .B shorkmines
 [\fB\-w\fR \fIWIDTH\fR]
 [\fB\-h\fR \fIHEIGHT\fR]
 [\fB\-m\fR \fIDENSITY\fR]
-.SH DESCRIPTION
-.B shorkmines
-is an implementation of Minesweeper. It is played using the keyboard
-instead of a mouse.
-.SH CONTROLS
-.TP
-.BR hjkl ", " wasd ", " arrows-keys\fR
-Move the cursor around
-.TP
-.BR f ", " g\fR
-Toggle flag at tile under cursor
-.TP
-.BR , " OR " Enter\fR
-Open tile under cursor
 .SH OPTIONS
-.TP
-.BR \-w ", " \-\-width =\fIWIDTH\fR
-The width of the playing area in tiles.
-.TP
+.TP 4
 .BR \-h ", " \-\-height =\fIHEIGHT\fR
-The height of the playing area in tiles.
-.TP
-.BR \-m ", " \-\-mine-density =\fIDENSITY\fR
-A value between 0.0 and 1.0 that determines the difficulty of the game.
-The default value is 0.1, which means that roughly 10% of all tiles will contain
-a mine. Increase the value to increase the difficulty. The game will start to
-become unplayable when around 0.5.
-
-In this mode, you can not place flags, and you can only open tiles that you
-step on. Any tile that you step on will automatically open.
-.TP
+Specifies the game board's height (will be clamped if taller than window).
+.TP 4
 .BR \-\-help\fR
-Show this manual page.
-.TP
+Shows this manual page instead of launching.
+.TP 4
+.BR \-m ", " \-\-mine-density =\fIDENSITY\fR
+Specifies how many mines will be placed on the game board (from 0.0 for no mines to 1.0 for all mines). 0.1 is the default value, roughly translating to about 10% of tiles containing a mine. The game will start to become unplayable at around 0.5.
+.TP 4
 .BR \-v ", " \-\-version\fR
-Print the current version.
+Displays version number and exits.
+.TP 4
+.BR \-w ", " \-\-width =\fIWIDTH\fR
+Specifies the game board's width (will be clamped if wider than window).
+.SH CONTROLS
+.TP 4
+.BR hjkl " OR " wasd " OR " arrows-keys\fR
+Moves the cursor to select a tile
+.TP 4
+.BR f " OR " g\fR
+Places or removes a flag at the selected tile
+.TP 4
+.BR Space " OR " ,\fR
+Opens the selected tile
