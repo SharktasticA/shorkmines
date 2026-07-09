@@ -10,8 +10,9 @@ struct tm_options {
 	float mine_density;
 };
 
-void print_version(void);
-void show_help(void);
+void show_man_help(void);
+void show_inbuilt_help(void);
+void show_version(void);
 struct tm_options parse_options(int argc, char **argv);
 
 #endif

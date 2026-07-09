@@ -43,7 +43,7 @@ Usage: shorkmines [OPTIONS]
 ### Options
 
 * `-h`, `--height` Specifies the game board's height (will be clamped if taller than window)
-* `--help`: Shows a manual page (if present) instead of launching or in-built help information and exits
+* `--help`: Shows a manual page (if present) instead of launching or displays in-built help information and exits
 * `-m`, `--mine-density`: Specifies how many mines will be placed on the game board (from 0.0 for no mines to 1.0 for all mines)
 * `-w`, `--width`: Specifies the game board's width (will be clamped if wider than window)
 * `-v`, `--version`: Displays version number and exits
