@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 {
 	OPTIONS = parseOptions(argc, argv);
 
-	if (OPTIONS.width == DEFAULT_WIDTH && OPTIONS.height == DEFAULT_HEIGHT && OPTIONS.mineDensity == DEFAULT_DENSITY)
+	if (OPTIONS.width == DEFAULT_WIDTH && OPTIONS.height == DEFAULT_HEIGHT && !OPTIONS.mineDensitySet)
 		if (!showMainMenu())
 			return 0;
 

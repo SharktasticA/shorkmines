@@ -32,7 +32,8 @@ struct SM_OPTIONS parseOptions(int argc, char **argv)
 	struct SM_OPTIONS SM_OPTIONS = {
 		.width = DEFAULT_WIDTH,
 		.height = DEFAULT_HEIGHT,
-		.mineDensity = DEFAULT_DENSITY
+		.mineDensity = DEFAULT_DENSITY,
+		.mineDensitySet = false
 	};
 
 	signed char param;
@@ -60,7 +61,10 @@ struct SM_OPTIONS parseOptions(int argc, char **argv)
 			{
 				float value = strtof(optarg, NULL);
 				if (value != 0)
+				{
 					SM_OPTIONS.mineDensity = value;
+					SM_OPTIONS.mineDensitySet = true;
+				}
 				break;
 			}
 
