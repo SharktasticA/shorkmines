@@ -235,14 +235,15 @@ int showMainMenu(void)
 	MenuItem menu[] = {
 		{ "",      "Select size & difficulty", NULL, NULL, 1, 1 },
 		{ "def",   "Default       (20x12, 15\% mines)", NULL, NULL, 1, 0 },
+		{ "full",  "", NULL, NULL, 1, 0 },
 		{ "diff1", "Beginner      (9x9, 13\% mines)", NULL, NULL, 1, 0 },
 		{ "diff2", "Intermediate  (16x16, 17\% mines)", NULL, NULL, 1, 0 },
 		{ "diff3", "Expert        (30x16, 25\% mines)", NULL, NULL, 1, 0 },
-		{ "full",  "", NULL, NULL, 1, 0 }
+		{ "diff4", "Impossible    (42x16, 50\% mines)", NULL, NULL, 1, 0 }
 	};
 	int fullScreenWidth = TERM_SIZE.ws_col - 2;
 	int fullScreenHeight = TERM_SIZE.ws_row - 7;
-	snprintf(menu[5].name, 80, "Full screen   (%dx%d, 15%% mines)", fullScreenWidth, fullScreenHeight);
+	snprintf(menu[2].name, 80, "Full screen   (%dx%d, 15%% mines)", fullScreenWidth, fullScreenHeight);
 	int menuSize = sizeof(menu) / sizeof(menu[0]);
 
 	int result = 1;
@@ -297,6 +298,12 @@ int showMainMenu(void)
 				{
 					// Don't need to do anything!
 				}
+				else if (strcmp(menu[cursorY - 1].id, "full") == 0)
+				{
+					OPTIONS.width = fullScreenWidth;
+					OPTIONS.height = fullScreenHeight;
+					OPTIONS.mineDensity = 0.15;
+				}
 				else if (strcmp(menu[cursorY - 1].id, "diff1") == 0)
 				{
 					OPTIONS.width = 9;
@@ -315,11 +322,11 @@ int showMainMenu(void)
 					OPTIONS.height = 16;
 					OPTIONS.mineDensity = 0.25;
 				}
-				else if (strcmp(menu[cursorY - 1].id, "full") == 0)
+				else if (strcmp(menu[cursorY - 1].id, "diff4") == 0)
 				{
-					OPTIONS.width = fullScreenWidth;
-					OPTIONS.height = fullScreenHeight;
-					OPTIONS.mineDensity = 0.15;
+					OPTIONS.width = 42;
+					OPTIONS.height = 16;
+					OPTIONS.mineDensity = 0.5;
 				}
 				break;
 		
