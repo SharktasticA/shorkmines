@@ -33,7 +33,8 @@ extern WINDOW *STATUS_WIN;
 
 
 void gameLoop(WINDOW*, struct minesweeper_game*, struct SM_OPTIONS);
-void setupNcurses();
+void moveCursor(struct minesweeper_game*, enum direction, struct SM_OPTIONS);
+void setupNcurses(void);
+int showMainMenu(void);
 void startWithGame(struct minesweeper_game*, struct SM_OPTIONS);
 void tileChanged(struct minesweeper_game*, struct minesweeper_tile*, void*);
-void tmMoveCursor(struct minesweeper_game*, enum direction, struct SM_OPTIONS);

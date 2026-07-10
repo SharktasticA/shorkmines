@@ -30,9 +30,9 @@ struct SM_OPTIONS parseOptions(int argc, char **argv)
 
 	// Default options
 	struct SM_OPTIONS SM_OPTIONS = {
-		.width = 20,
-		.height = 12,
-		.mineDensity = 0.1
+		.width = DEFAULT_WIDTH,
+		.height = DEFAULT_HEIGHT,
+		.mineDensity = DEFAULT_DENSITY
 	};
 
 	signed char param;

@@ -12,9 +12,13 @@ struct SM_OPTIONS {
 	float mineDensity;
 };
 
+#define DEFAULT_WIDTH	20
+#define DEFAULT_HEIGHT	12
+#define DEFAULT_DENSITY 0.15f
 
 
-struct SM_OPTIONS parseOptions(int argc, char **argv);
+
+struct SM_OPTIONS parseOptions(int, char**);
 void showInBuiltHelp(void);
 void showManHelp(void);
 void showVersion(void);

@@ -160,6 +160,33 @@ int isProgramInstalled(char *prog, int isExec)
 }
 
 /**
+ * Splits a given string via any newline escape sequences into an array of strings.
+ * @param text Text to split
+ * @param textLines Text once split
+ * @param totalLines Number of newlines detected
+ */
+void splitText(char *text, char *textLines[], int totalLines)
+{
+    int count = 0;
+    char *curr = text;
+    char *start = text;
+
+    while (*curr && count < totalLines)
+    {
+        if (*curr == '\n')
+        {
+            *curr = '\0';
+            textLines[count++] = start;
+            start = curr + 1;
+        }
+        curr++;
+    }
+
+    if (count < totalLines)
+        textLines[count++] = start;
+}
+
+/**
  * A C99-only implementation of POSIX's strdup. Creates and returns a heap
  * allocated copy of the input string.
  * @param input Input string to duplicate

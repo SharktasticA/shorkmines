@@ -22,6 +22,11 @@
 int main(int argc, char **argv)
 {
 	OPTIONS = parseOptions(argc, argv);
+
+	if (OPTIONS.width == DEFAULT_WIDTH && OPTIONS.height == DEFAULT_HEIGHT && OPTIONS.mineDensity == DEFAULT_DENSITY)
+		if (!showMainMenu())
+			return 0;
+
 	setupNcurses();
 
 	// Make sure the desired size is not larger than the terminal window

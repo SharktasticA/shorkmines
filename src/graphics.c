@@ -116,10 +116,15 @@ void updateStatusWindow(WINDOW *STATUS_WINDOW, struct minesweeper_game *game)
 		snprintf(mineText, sizeof(mineText), "Mines: %d", game->mine_count);
 		snprintf(flagText, sizeof(flagText), "Flags: %d", game->flag_count);
 	}
-	else
+	else if (windowWidth >= 12)
 	{
 		snprintf(mineText, sizeof(mineText), "M: %d", game->mine_count);
 		snprintf(flagText, sizeof(flagText), "F: %d", game->flag_count);
+	}
+	else
+	{
+		snprintf(mineText, sizeof(mineText), "M %d", game->mine_count);
+		snprintf(flagText, sizeof(flagText), "F %d", game->flag_count);
 	}
 
 	int flagTextLen = strlen(flagText);

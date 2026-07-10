@@ -16,6 +16,7 @@
 
 #include "graphics.h"
 #include "options.h"
+#include "shorkmenu.h"
 #include "shorkmines.h"
 
 #include <minesweeper.h>
@@ -101,25 +102,25 @@ void gameLoop(WINDOW *window, struct minesweeper_game *game, struct SM_OPTIONS o
 			case KEY_LEFT:
 			case 'h':
 			case 'a':
-				tmMoveCursor(game, LEFT, options);
+				moveCursor(game, LEFT, options);
 				break;
 
 			case KEY_RIGHT:
 			case 'l':
 			case 'd':
-				tmMoveCursor(game, RIGHT, options);
+				moveCursor(game, RIGHT, options);
 				break;
 
 			case KEY_UP:
 			case 'k':
 			case 'w':
-				tmMoveCursor(game, UP, options);
+				moveCursor(game, UP, options);
 				break;
 
 			case KEY_DOWN:
 			case 'j':
 			case 's':
-				tmMoveCursor(game, DOWN, options);
+				moveCursor(game, DOWN, options);
 				break;
 
 			case 'g':
@@ -205,6 +206,11 @@ void gameLoop(WINDOW *window, struct minesweeper_game *game, struct SM_OPTIONS o
  	endwin();
 }
 
+void moveCursor(struct minesweeper_game *game, enum direction direction, struct SM_OPTIONS options)
+{
+	minesweeper_move_cursor(game, direction, true);
+}
+
 void setupNcurses()
 {
 	setlocale(LC_ALL, "");
@@ -215,6 +221,125 @@ void setupNcurses()
 	initColours();
 	curs_set(0);
 	refresh();
+}
+
+/**
+ * 
+ * @return 1 if game should launch after menu; 0 if not
+ */
+int showMainMenu(void)
+{
+	setupMenuSys();
+
+
+	MenuItem menu[] = {
+		{ "",      "Select size & difficulty", NULL, NULL, 1, 1 },
+		{ "def",   "Default       (20x12, 15\% mines)", NULL, NULL, 1, 0 },
+		{ "diff1", "Beginner      (9x9, 13\% mines)", NULL, NULL, 1, 0 },
+		{ "diff2", "Intermediate  (16x16, 17\% mines)", NULL, NULL, 1, 0 },
+		{ "diff3", "Expert        (30x16, 25\% mines)", NULL, NULL, 1, 0 },
+		{ "full",  "", NULL, NULL, 1, 0 }
+	};
+	int fullScreenWidth = TERM_SIZE.ws_col - 2;
+	int fullScreenHeight = TERM_SIZE.ws_row - 7;
+	snprintf(menu[5].name, 80, "Full screen   (%dx%d, 15%% mines)", fullScreenWidth, fullScreenHeight);
+	int menuSize = sizeof(menu) / sizeof(menu[0]);
+
+	int result = 1;
+	int running = 1;
+	int cursorX = 1;
+	int cursorY = 1;
+	int cursorXPrev = 1;
+	int cursorYPrev = 0;
+	int fullRedraw = 1;
+
+	while (running)
+	{
+		if (fullRedraw)
+		{
+			clearScreen();
+			printHeader("SHORKMINES");
+			printMenu(menu, menuSize, NULL, 1, TERM_SIZE.ws_col - 6, menuSize, &cursorX, &cursorY, &cursorXPrev, &cursorYPrev);
+			printFooter("[jk] Navigate [Enter] Select [q] Quit");
+		}
+		else
+		{
+			if (COL_ENABLED)
+				printf("\x1b[2;1H");
+			else
+				printf("\x1b[3;1H");
+			printMenu(menu, menuSize, NULL, 1, TERM_SIZE.ws_col - 6, menuSize, &cursorX, &cursorY, &cursorXPrev, &cursorYPrev);
+		}
+
+		NavInput input = getNavInput();
+
+		fullRedraw = 1;
+		cursorYPrev = 0;
+		switch (input)
+		{
+			case CURSOR_UP:
+				cursorYPrev = cursorY;
+				cursorY--;
+				if (cursorY < 1) cursorY = menuSize;
+				fullRedraw = 0;
+				break;
+
+			case CURSOR_DOWN:
+				cursorYPrev = cursorY;
+				cursorY++;
+				if (cursorY > menuSize) cursorY = 1;
+				fullRedraw = 0;
+				break;
+
+			case ENTER:
+				running = 0;
+				if (strcmp(menu[cursorY - 1].id, "def") == 0)
+				{
+					// Don't need to do anything!
+				}
+				else if (strcmp(menu[cursorY - 1].id, "diff1") == 0)
+				{
+					OPTIONS.width = 9;
+					OPTIONS.height = 9;
+					OPTIONS.mineDensity = 0.13;
+				}
+				else if (strcmp(menu[cursorY - 1].id, "diff2") == 0)
+				{
+					OPTIONS.width = 16;
+					OPTIONS.height = 16;
+					OPTIONS.mineDensity = 0.17;
+				}
+				else if (strcmp(menu[cursorY - 1].id, "diff3") == 0)
+				{
+					OPTIONS.width = 30;
+					OPTIONS.height = 16;
+					OPTIONS.mineDensity = 0.25;
+				}
+				else if (strcmp(menu[cursorY - 1].id, "full") == 0)
+				{
+					OPTIONS.width = fullScreenWidth;
+					OPTIONS.height = fullScreenHeight;
+					OPTIONS.mineDensity = 0.15;
+				}
+				break;
+		
+			case QUIT:
+				running = 0;
+				result = 0;
+				break;
+
+			case INVALID:
+				fullRedraw = 0;
+				break;
+
+			default:
+				continue;
+		}
+	}
+
+	freeMenu(menu, menuSize);
+	onExit();
+	return result;
 }
 
 void startWithGame(struct minesweeper_game *game, struct SM_OPTIONS options)
@@ -264,9 +389,4 @@ void startWithGame(struct minesweeper_game *game, struct SM_OPTIONS options)
 void tileChanged(struct minesweeper_game *game, struct minesweeper_tile *tile, void *context)
 {
 	renderTile(game, tile, GAME_WIN);
-}
-
-void tmMoveCursor(struct minesweeper_game *game, enum direction direction, struct SM_OPTIONS options)
-{
-	minesweeper_move_cursor(game, direction, true);
 }
