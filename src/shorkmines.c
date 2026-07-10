@@ -198,7 +198,13 @@ void gameLoop(WINDOW *window, struct minesweeper_game *game, struct SM_OPTIONS o
 	wattroff(STATUS_WIN, COLOR_PAIR(endColour) | A_BOLD);
 	wrefresh(STATUS_WIN);
 
-	wgetch(window);
+	// Update footer and way for 'q' before exiting
+	renderBar(FOOTER_WIN, "[q] Quit");
+	int endCh;
+	do
+	{
+		endCh = wgetch(window);
+	} while (endCh != 'q');
 #ifdef EMBEDDED
 	clear();
 	refresh();
