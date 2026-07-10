@@ -2,7 +2,7 @@
 
 An ncurses-based minesweeper game played using a keyboard instead of a mouse. It is a fork of Joel Ekström's [terminal-mines](https://github.com/joelekstrom/terminal-mines), which is a reference frontend for [libminesweeper](https://github.com/joelekstrom/libminesweeper). SHORKMINES is modified for use with SHORK Operating Systems such as [SHORK 486](https://github.com/SharktasticA/SHORK-486).
 
-<p align="center"><img alt="A screenshot of SHORKMINES running on SHORK 486" src="screenshots/vmware_shork-486_in_play.png"></p>
+<p align="center"><img alt="A screenshot of SHORKMINES running on SHORK 486 whilst in play" src="screenshots/vmware_shork-486_in_play.png"></p>
 
 
 
@@ -61,4 +61,14 @@ Usage: shorkmines [OPTIONS]
 
 ## Screenshots
 
-<p align="center"><img alt="A screenshot of SHORKMINES running on a modern PC with Debian 13" src="screenshots/sharktastica-desktop_hit_mine.png"></p>
+### Size & difficulty menu
+
+<p align="center"><img alt="A screenshot of SHORKMINES running on a modern PC with Debian 13 showing the select size and difficulty menu" src="screenshots/sharktastica-desktop_menu.png"></p>
+
+### In play
+
+<p align="center"><img alt="A screenshot of SHORKMINES running on a modern PC with Debian 13 whilst in play" src="screenshots/sharktastica-desktop_in_play.png"></p>
+
+### Hit mine
+
+<p align="center"><img alt="A screenshot of SHORKMINES running on a modern PC with Debian 13 after hitting a mine" src="screenshots/sharktastica-desktop_hit_mine.png"></p>
