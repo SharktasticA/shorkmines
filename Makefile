@@ -2,7 +2,7 @@ SYSROOT ?=
 CFLAGS = -std=c99 -Wall
 LDLIBS = -lncursesw -lminesweeper
 LDFLAGS = -Llibminesweeper -L$(SYSROOT)/lib
-CPPFLAGS = -Ilibminesweeper/include -I$(SYSROOT)/include
+CPPFLAGS = -Ilibminesweeper/include -I$(SYSROOT)/include -Isrc
 
 ifdef EMBEDDED
 	CFLAGS += -DEMBEDDED
@@ -11,10 +11,12 @@ endif
 PREFIX?=/usr
 EXECUTABLE = shorkmines
 LIBMINESWEEPER = libminesweeper/libminesweeper.a
-SOURCES = $(wildcard *.c)
+SRCDIR = src
+SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 
 $(EXECUTABLE): $(LIBMINESWEEPER) $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
 
 $(LIBMINESWEEPER):
 	$(MAKE) -C libminesweeper SYSROOT=$(SYSROOT)
@@ -23,7 +25,7 @@ $(LIBMINESWEEPER):
 
 clean:
 	rm -f $(EXECUTABLE) || true
-	rm $(OBJECTS) || true
+	rm -f $(OBJECTS) || true
 	$(MAKE) -C libminesweeper clean || true
 
 install: $(EXECUTABLE)
