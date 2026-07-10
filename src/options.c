@@ -144,11 +144,11 @@ void showManHelp()
 	}
 
 	// If manpage exists locally, prioritize it to allow local builds to show help
-	char *manpage_path = NULL;
+	char *manPagePath = NULL;
 	if (access("man/shorkmines.1", F_OK | R_OK) != -1)
-		manpage_path = "man/shorkmines.1";
+		manPagePath = "man/shorkmines.1";
 	else
-		manpage_path = "shorkmines";
+		manPagePath = "shorkmines";
 
 	pid_t pid = fork();
 	if (pid == 0) /* Child process */
@@ -156,7 +156,7 @@ void showManHelp()
 		// Suppress man's "no manual entry" message since we have a fallback
 		freopen("/dev/null", "w", stderr);
 
-		char *argv[] = {"man", manpage_path, NULL};
+		char *argv[] = {"man", manPagePath, NULL};
 		execv("/usr/bin/man", argv);
 		exit(127); /* only if execv fails */
 	}
