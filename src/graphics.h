@@ -33,13 +33,13 @@ enum TILE_INDEX {
 };
 
 #ifdef EMBEDDED
-void draw_box(WINDOW *window);
+void drawBox(WINDOW *window);
 #endif
-void init_colors();
-void render_bar(WINDOW *window, const char *text);
-void render_game(struct minesweeper_game *game, WINDOW *window);
-void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window);
-int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *tile);
-void update_status_window(WINDOW *status_window, struct minesweeper_game *game);
+void initColours();
+void renderBar(WINDOW *window, const char *text);
+void renderGame(struct minesweeper_game *game, WINDOW *window);
+void renderTile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window);
+int tileIndexForTile(struct minesweeper_game *game, struct minesweeper_tile *tile);
+void updateStatusWindow(WINDOW *STATUS_WINDOW, struct minesweeper_game *game);
 
 #endif

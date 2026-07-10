@@ -28,15 +28,15 @@
 
 
 
-WINDOW *footer_win;
-WINDOW *game_win;
-WINDOW *header_win;
-struct tm_options global_options;
-WINDOW *status_win;
+WINDOW *FOOTER_WIN;
+WINDOW *GAME_WIN;
+WINDOW *HEADER_WIN;
+struct SM_OPTIONS OPTIONS;
+WINDOW *STATUS_WIN;
 
 
 
-void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options options)
+void gameLoop(WINDOW *window, struct minesweeper_game *game, struct SM_OPTIONS options)
 {
 	// Wait for keygame input
 	keypad(stdscr, TRUE);
@@ -44,7 +44,7 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 
 	while(1)
 	{
-		struct minesweeper_tile *previous_tile = game->selected_tile;
+		struct minesweeper_tile *prevTile = game->selected_tile;
 		int ch = getch();
 
 		if (ch == 27)
@@ -101,40 +101,40 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 			case KEY_LEFT:
 			case 'h':
 			case 'a':
-				tm_move_cursor(game, LEFT, options);
+				tmMoveCursor(game, LEFT, options);
 				break;
 
 			case KEY_RIGHT:
 			case 'l':
 			case 'd':
-				tm_move_cursor(game, RIGHT, options);
+				tmMoveCursor(game, RIGHT, options);
 				break;
 
 			case KEY_UP:
 			case 'k':
 			case 'w':
-				tm_move_cursor(game, UP, options);
+				tmMoveCursor(game, UP, options);
 				break;
 
 			case KEY_DOWN:
 			case 'j':
 			case 's':
-				tm_move_cursor(game, DOWN, options);
+				tmMoveCursor(game, DOWN, options);
 				break;
 
 			case 'g':
 			case 'f':
 				minesweeper_toggle_flag(game, game->selected_tile);
-				update_status_window(status_win, game);
+				updateStatusWindow(STATUS_WIN, game);
 				break;
 			/*case ' ':
 				minesweeper_space_tile(game, game->selected_tile);
-				update_status_window(status_win, game);
+				updateStatusWindow(STATUS_WIN, game);
 				break;*/
 			case ',':
 			case ' ':
 				minesweeper_open_tile(game, game->selected_tile);
-				update_status_window(status_win, game);
+				updateStatusWindow(STATUS_WIN, game);
 				break;
 			case 'q':
 #ifdef EMBEDDED
@@ -146,56 +146,56 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
 				break;
 		}
 
-		if (game->selected_tile != previous_tile)
+		if (game->selected_tile != prevTile)
 		{
-			render_tile(game, previous_tile, window);
-			render_tile(game, game->selected_tile, window);
+			renderTile(game, prevTile, window);
+			renderTile(game, game->selected_tile, window);
 		}
 
 		wrefresh(window);
 	}
 
-	render_game(game, window);
+	renderGame(game, window);
 	wrefresh(window);
 
 
 
 	// Update the status window to display a win/lose message, and then exit
 	// the game after a key press
-	char *end_text = NULL;
-	int end_color = COLOR_PAIR_DEFAULT;
+	char *endText = NULL;
+	int endColour = COLOR_PAIR_DEFAULT;
 	if (game->state == MINESWEEPER_GAME_OVER)
 	{
-		end_text = ":-(";
-		end_color = COLOR_PAIR_LOSE;
+		endText = ":-(";
+		endColour = COLOR_PAIR_LOSE;
 	}
 	else if (game->state == MINESWEEPER_WIN)
 	{
-		end_text = "B-)";
-		end_color = COLOR_PAIR_WIN;
+		endText = "B-)";
+		endColour = COLOR_PAIR_WIN;
 	}
 
-	wclear(status_win);
+	wclear(STATUS_WIN);
 #ifdef EMBEDDED
-	draw_box(status_win);
+	drawBox(STATUS_WIN);
 #else
-	box(status_win, 0, 0);
+	box(STATUS_WIN, 0, 0);
 #endif
 
-	int win_width, win_height;
-	getmaxyx(status_win, win_height, win_width);
-	wattron(status_win, COLOR_PAIR(end_color));
-	mvwhline(status_win, 1, 1, ' ', win_width - 2);
-	wattroff(status_win, COLOR_PAIR(end_color));
+	int winWidth, winHeight;
+	getmaxyx(STATUS_WIN, winHeight, winWidth);
+	wattron(STATUS_WIN, COLOR_PAIR(endColour));
+	mvwhline(STATUS_WIN, 1, 1, ' ', winWidth - 2);
+	wattroff(STATUS_WIN, COLOR_PAIR(endColour));
 
-	int text_x = (win_width - (int)strlen(end_text)) / 2;
-	if (text_x < 1)
-		text_x = 1;
+	int textX = (winWidth - (int)strlen(endText)) / 2;
+	if (textX < 1)
+		textX = 1;
 
-	wattron(status_win, COLOR_PAIR(end_color) | A_BOLD);
-	mvwprintw(status_win, 1, text_x, "%s", end_text);
-	wattroff(status_win, COLOR_PAIR(end_color) | A_BOLD);
-	wrefresh(status_win);
+	wattron(STATUS_WIN, COLOR_PAIR(endColour) | A_BOLD);
+	mvwprintw(STATUS_WIN, 1, textX, "%s", endText);
+	wattroff(STATUS_WIN, COLOR_PAIR(endColour) | A_BOLD);
+	wrefresh(STATUS_WIN);
 
 	wgetch(window);
 #ifdef EMBEDDED
@@ -205,68 +205,68 @@ void game_loop(WINDOW *window, struct minesweeper_game *game, struct tm_options 
  	endwin();
 }
 
-void setup_ncurses()
+void setupNcurses()
 {
 	setlocale(LC_ALL, "");
 	initscr();
 	start_color();
 	cbreak();
 	noecho();
-	init_colors();
+	initColours();
 	curs_set(0);
 	refresh();
 }
 
-void start_with_game(struct minesweeper_game *game, struct tm_options options)
+void startWithGame(struct minesweeper_game *game, struct SM_OPTIONS options)
 {
-	int screen_width, screen_height;
-	getmaxyx(stdscr, screen_height, screen_width);
+	int screenWidth, screenHeight;
+	getmaxyx(stdscr, screenHeight, screenWidth);
 
 	// Create a header for displaying program name and game size and a footer
 	// for game controls
-	header_win = newwin(1, screen_width, 0, 0);
-	footer_win = newwin(1, screen_width, screen_height - 1, 0);
+	HEADER_WIN = newwin(1, screenWidth, 0, 0);
+	FOOTER_WIN = newwin(1, screenWidth, screenHeight - 1, 0);
 
 	// Create window where we will draw the game. Add 2
 	// tiles padding so we can draw a box around it
-	int window_width = game->width + 2;
-	int window_height = game->height + 2;
-	int window_x = screen_width / 2 - window_width / 2;
-	int window_y = (screen_height - (window_height + 3)) / 2;
-	game_win = newwin(window_height, window_width, window_y, window_x);
+	int windowWidth = game->width + 2;
+	int windowHeight = game->height + 2;
+	int windowX = screenWidth / 2 - windowWidth / 2;
+	int windowY = (screenHeight - (windowHeight + 3)) / 2;
+	GAME_WIN = newwin(windowHeight, windowWidth, windowY, windowX);
 
 #ifdef EMBEDDED
-	draw_box(game_win);
+	drawBox(GAME_WIN);
 #else
-	box(game_win, 0, 0);
+	box(GAME_WIN, 0, 0);
 #endif
 
-	status_win = newwin(3, window_width, window_y + window_height, window_x);
+	STATUS_WIN = newwin(3, windowWidth, windowY + windowHeight, windowX);
 
 	minesweeper_set_cursor(game, game->width / 2, game->height / 2);
 
 	// Draw header and footer
 	char title[80];
 	snprintf(title, 80, "SHORKMINES - %dx%d", game->width, game->height);
-	render_bar(header_win, title);
-	render_bar(footer_win, "[hjkl] Move [f] Flag [Space] Open [q] Quit");
+	renderBar(HEADER_WIN, title);
+	renderBar(FOOTER_WIN, "[hjkl] Move [f] Flag [Space] Open [q] Quit");
 
 	// Draw an initial representation so you see the window when the game starts
-	render_game(game, game_win);
-	wrefresh(game_win);
-	update_status_window(status_win, game);
-	wrefresh(status_win);
+	renderGame(game, GAME_WIN);
+	wrefresh(GAME_WIN);
+	updateStatusWindow(STATUS_WIN, game);
+	wrefresh(STATUS_WIN);
 	
-	game_loop(game_win, game, options);
+	gameLoop(GAME_WIN, game, options);
 }
 
 // Callback from libminesweeper
-void tile_changed(struct minesweeper_game *game, struct minesweeper_tile *tile, void *context)
+void tileChanged(struct minesweeper_game *game, struct minesweeper_tile *tile, void *context)
 {
-	render_tile(game, tile, game_win);
+	renderTile(game, tile, GAME_WIN);
 }
 
-void tm_move_cursor(struct minesweeper_game *game, enum direction direction, struct tm_options options)
+void tmMoveCursor(struct minesweeper_game *game, enum direction direction, struct SM_OPTIONS options)
 {
 	minesweeper_move_cursor(game, direction, true);
 }

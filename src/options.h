@@ -4,15 +4,19 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-struct tm_options {
+
+
+struct SM_OPTIONS {
 	int width;
 	int height;
-	float mine_density;
+	float mineDensity;
 };
 
-void show_man_help(void);
-void show_inbuilt_help(void);
-void show_version(void);
-struct tm_options parse_options(int argc, char **argv);
+
+
+struct SM_OPTIONS parseOptions(int argc, char **argv);
+void showInBuiltHelp(void);
+void showManHelp(void);
+void showVersion(void);
 
 #endif

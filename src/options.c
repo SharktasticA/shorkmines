@@ -17,7 +17,71 @@ static const char *VERSION = "1.3-wip";
 
 
 
-void show_inbuilt_help()
+struct SM_OPTIONS parseOptions(int argc, char **argv)
+{
+	static struct option options[] = {
+		{ "width", required_argument, NULL, 'w' },
+		{ "height", required_argument, NULL, 'h' },
+		{ "mine-density",  required_argument, NULL, 'm' },
+		{ "help", no_argument, NULL, 1 },
+		{ "version", no_argument, NULL, 'v' },
+		{ NULL, 0, NULL, 0 }
+	};
+
+	// Default options
+	struct SM_OPTIONS SM_OPTIONS = {
+		.width = 20,
+		.height = 12,
+		.mineDensity = 0.1
+	};
+
+	signed char param;
+	while ((param = getopt_long(argc, argv, "w:h:m:v", options, NULL)) != -1)
+	{
+		switch (param)
+		{
+			case 'w':
+			{
+				uintmax_t value = strtoumax(optarg, NULL, 10);
+				if (value != UINTMAX_MAX)
+					SM_OPTIONS.width = (int)value;
+				break;
+			}
+
+			case 'h':
+			{
+				uintmax_t value = strtoumax(optarg, NULL, 10);
+				if (value != UINTMAX_MAX)
+					SM_OPTIONS.height = (int)value;
+				break;
+			}
+
+			case 'm':
+			{
+				float value = strtof(optarg, NULL);
+				if (value != 0)
+					SM_OPTIONS.mineDensity = value;
+				break;
+			}
+
+			case 'v':
+			{
+				showVersion();
+				exit(0);
+			}
+
+			case 1:
+			{
+				showManHelp();
+				exit(0);
+			}
+		}
+	}
+	
+	return SM_OPTIONS;
+}
+
+void showInBuiltHelp()
 {
 	struct winsize termSize = getTerminalSize();
 
@@ -70,12 +134,12 @@ void show_inbuilt_help()
     printf("%s", space);
 }
 
-void show_man_help()
+void showManHelp()
 {
 	// If man is not found, call to show the inbuilt help
 	if (!isProgramInstalled("man", true))
 	{
-		show_inbuilt_help();
+		showInBuiltHelp();
 		return;
 	}
 
@@ -104,75 +168,11 @@ void show_man_help()
 		// If unsuccessful - say issue with man, manpage not found - resort to
 		// in-built fallback help
 		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
-			show_inbuilt_help();
+			showInBuiltHelp();
 	}
 }
 
-void show_version()
+void showVersion()
 {
 	printf("SHORKMINES %s\n", VERSION);
-}
-
-struct tm_options parse_options(int argc, char **argv)
-{
-	static struct option options[] = {
-		{ "width", required_argument, NULL, 'w' },
-		{ "height", required_argument, NULL, 'h' },
-		{ "mine-density",  required_argument, NULL, 'm' },
-		{ "help", no_argument, NULL, 1 },
-		{ "version", no_argument, NULL, 'v' },
-		{ NULL, 0, NULL, 0 }
-	};
-
-	// Default options
-	struct tm_options tm_options = {
-		.width = 20,
-		.height = 12,
-		.mine_density = 0.1
-	};
-
-	signed char param;
-	while ((param = getopt_long(argc, argv, "w:h:m:v", options, NULL)) != -1)
-	{
-		switch (param)
-		{
-			case 'w':
-			{
-				uintmax_t value = strtoumax(optarg, NULL, 10);
-				if (value != UINTMAX_MAX)
-					tm_options.width = (int)value;
-				break;
-			}
-
-			case 'h':
-			{
-				uintmax_t value = strtoumax(optarg, NULL, 10);
-				if (value != UINTMAX_MAX)
-					tm_options.height = (int)value;
-				break;
-			}
-
-			case 'm':
-			{
-				float value = strtof(optarg, NULL);
-				if (value != 0)
-					tm_options.mine_density = value;
-				break;
-			}
-
-			case 'v':
-			{
-				show_version();
-				exit(0);
-			}
-
-			case 1:
-			{
-				show_man_help();
-				exit(0);
-			}
-		}
-	}
-	
-	return tm_options;
 }

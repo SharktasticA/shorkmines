@@ -24,16 +24,16 @@
 
 
 
-extern WINDOW *footer_win;
-extern WINDOW *game_win;
-extern WINDOW *header_win;
-extern struct tm_options global_options;
-extern WINDOW *status_win;
+extern WINDOW *FOOTER_WIN;
+extern WINDOW *GAME_WIN;
+extern WINDOW *HEADER_WIN;
+extern struct SM_OPTIONS OPTIONS;
+extern WINDOW *STATUS_WIN;
 
 
 
-void game_loop(WINDOW*, struct minesweeper_game*, struct tm_options);
-void setup_ncurses();
-void start_with_game(struct minesweeper_game*, struct tm_options);
-void tile_changed(struct minesweeper_game*, struct minesweeper_tile*, void*);
-void tm_move_cursor(struct minesweeper_game*, enum direction, struct tm_options);
+void gameLoop(WINDOW*, struct minesweeper_game*, struct SM_OPTIONS);
+void setupNcurses();
+void startWithGame(struct minesweeper_game*, struct SM_OPTIONS);
+void tileChanged(struct minesweeper_game*, struct minesweeper_tile*, void*);
+void tmMoveCursor(struct minesweeper_game*, enum direction, struct SM_OPTIONS);

@@ -21,32 +21,32 @@
 
 int main(int argc, char **argv)
 {
-	global_options = parse_options(argc, argv);
-	setup_ncurses();
+	OPTIONS = parseOptions(argc, argv);
+	setupNcurses();
 
 	// Make sure the desired size is not larger than the terminal window
-	int screen_width, screen_height;
-	getmaxyx(stdscr, screen_height, screen_width);
+	int screenWidth, screenHeight;
+	getmaxyx(stdscr, screenHeight, screenWidth);
 
 	// -2 for left and right borders
-	int max_width = screen_width - 2; 
+	int maxWidth = screenWidth - 2; 
 	// -2 for top and bottom borders, -3 for status window, -2 for extra
 	// padding
-	int max_height = screen_height - 7;
+	int maxHeight = screenHeight - 7;
 
-	if (global_options.width > max_width) 
-		global_options.width = max_width;
+	if (OPTIONS.width > maxWidth) 
+		OPTIONS.width = maxWidth;
 
-	if (global_options.height > max_height)
-		global_options.height = max_height;
+	if (OPTIONS.height > maxHeight)
+		OPTIONS.height = maxHeight;
 
 	// Set up a game game
 	srand(time(NULL));
-	uint8_t *buffer = malloc(minesweeper_minimum_buffer_size(global_options.width, global_options.height));
-	struct minesweeper_game *b = minesweeper_init(global_options.width, global_options.height, global_options.mine_density, buffer);
-	b->tile_update_callback = &tile_changed;
+	uint8_t *buffer = malloc(minesweeper_minimum_buffer_size(OPTIONS.width, OPTIONS.height));
+	struct minesweeper_game *game = minesweeper_init(OPTIONS.width, OPTIONS.height, OPTIONS.mineDensity, buffer);
+	game->tile_update_callback = &tileChanged;
 
 	// Start the ncurses frontend
-	start_with_game(b, global_options);
+	startWithGame(game, OPTIONS);
 	free(buffer);
 }

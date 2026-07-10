@@ -1,12 +1,12 @@
 #include "graphics.h"
 #include <string.h>
 
-extern struct tm_options global_options;
+extern struct SM_OPTIONS OPTIONS;
 
 
 #ifdef EMBEDDED
 
-void draw_box(WINDOW *win)
+void drawBox(WINDOW *win)
 {
 	int height, width;
 	getmaxyx(win, height, width);
@@ -24,7 +24,7 @@ void draw_box(WINDOW *win)
 
 #endif
 
-void init_colors()
+void initColours()
 {
 	use_default_colors();
 	init_pair(COLOR_PAIR_DEFAULT, -1, -1);
@@ -41,7 +41,7 @@ void init_colors()
 	init_pair(COLOR_PAIR_LOSE, COLOR_WHITE, COLOR_RED);
 }
 
-void render_bar(WINDOW *window, const char *text)
+void renderBar(WINDOW *window, const char *text)
 {
 	wbkgd(window, COLOR_PAIR(COLOR_PAIR_BAR) | ' ');
 	werase(window);
@@ -51,28 +51,26 @@ void render_bar(WINDOW *window, const char *text)
 	wrefresh(window);
 }
 
-void render_game(struct minesweeper_game *game, WINDOW *window)
+void renderGame(struct minesweeper_game *game, WINDOW *window)
 {
 	for (unsigned x = 0; x < game->width; x++) 
 	{
 		for (unsigned y = 0; y < game->height; y++) 
 		{
 			struct minesweeper_tile *tile = minesweeper_get_tile_at(game, x, y);
-			render_tile(game, tile, window);
+			renderTile(game, tile, window);
 		}
 	}
 }
 
-#ifdef EMBEDDED
-void draw_box(WINDOW *window);
-#endif
-void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window)
+void renderTile(struct minesweeper_game *game, struct minesweeper_tile *tile, WINDOW *window)
 {
-	int index = tile_index_for_tile(game, tile);
-	bool is_cursor = tile == game->selected_tile;
+	int index = tileIndexForTile(game, tile);
+	bool isCursor = tile == game->selected_tile;
+
 	if (index == TILE_INDEX_MINE)
 		wattron(window, COLOR_PAIR(COLOR_PAIR_MINE) | A_BOLD);
-	else if (is_cursor)
+	else if (isCursor)
 		wattron(window, COLOR_PAIR(COLOR_PAIR_CURSOR) | A_BOLD);
 	else if (index == TILE_INDEX_FLAG)
 		wattron(window, COLOR_PAIR(COLOR_PAIR_FLAG) | A_BOLD);
@@ -84,11 +82,11 @@ void render_tile(struct minesweeper_game *game, struct minesweeper_tile *tile, W
 	// Add 1 to the position in both axes so we stay within the
 	// window border.
 	unsigned x, y; minesweeper_get_tile_location(game, tile, &x, &y);
-	static char *tile_map[] = TILE_MAP;
-	mvwaddstr(window, y + 1, x + 1, tile_map[index]);
+	static char *tileMap[] = TILE_MAP;
+	mvwaddstr(window, y + 1, x + 1, tileMap[index]);
 }
 
-int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *tile)
+int tileIndexForTile(struct minesweeper_game *game, struct minesweeper_tile *tile)
 {
 	// Opened with mine, and game over state where all mines are displayed
 	if ((tile->has_mine && game->state == MINESWEEPER_GAME_OVER) || (tile->has_mine && tile->is_opened))
@@ -106,32 +104,32 @@ int tile_index_for_tile(struct minesweeper_game *game, struct minesweeper_tile *
 	return TILE_INDEX_UNOPENED;
 }
 
-void update_status_window(WINDOW *status_window, struct minesweeper_game *game)
+void updateStatusWindow(WINDOW *STATUS_WINDOW, struct minesweeper_game *game)
 {
-	int window_width = game->width;
+	int windowWidth = game->width;
 	
-	char mine_text[128];
-	char flag_text[128];
+	char mineText[128];
+	char flagText[128];
 
-	if (window_width >= 20)
+	if (windowWidth >= 20)
 	{
-		snprintf(mine_text, sizeof(mine_text), "Mines: %d", game->mine_count);
-		snprintf(flag_text, sizeof(flag_text), "Flags: %d", game->flag_count);
+		snprintf(mineText, sizeof(mineText), "Mines: %d", game->mine_count);
+		snprintf(flagText, sizeof(flagText), "Flags: %d", game->flag_count);
 	}
 	else
 	{
-		snprintf(mine_text, sizeof(mine_text), "M: %d", game->mine_count);
-		snprintf(flag_text, sizeof(flag_text), "F: %d", game->flag_count);
+		snprintf(mineText, sizeof(mineText), "M: %d", game->mine_count);
+		snprintf(flagText, sizeof(flagText), "F: %d", game->flag_count);
 	}
 
-	int flag_text_length = strlen(flag_text);
+	int flagTextLen = strlen(flagText);
 
 #ifdef EMBEDDED
-	draw_box(status_window);
+	drawBox(STATUS_WINDOW);
 #else
-	box(status_window, 0, 0);
+	box(STATUS_WINDOW, 0, 0);
 #endif
-	mvwprintw(status_window, 1, 1, "%s", mine_text);
-	mvwprintw(status_window, 1, window_width - (flag_text_length - 1), "%s", flag_text);
-	wrefresh(status_window);
+	mvwprintw(STATUS_WINDOW, 1, 1, "%s", mineText);
+	mvwprintw(STATUS_WINDOW, 1, windowWidth - (flagTextLen - 1), "%s", flagText);
+	wrefresh(STATUS_WINDOW);
 }
